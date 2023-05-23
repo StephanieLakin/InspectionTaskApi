@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using InspectionTaskApi.Data;
 using InspectionTaskApi.Models;
-
+using System.Reflection.Metadata.Ecma335;
 
 namespace InspectionTaskApi.Controllers
 {
@@ -23,6 +23,7 @@ namespace InspectionTaskApi.Controllers
         {    // Retrieve the list of inspections along with associated assigned persons
             return Ok(await _context.Inspections.Include(i => i.AssignedToPerson).ToListAsync());
         }
+
 
         // POST: api/inspection/copy accepts a CopyRequestDto object in the request body.
 
@@ -61,6 +62,15 @@ namespace InspectionTaskApi.Controllers
 
                 return StatusCode(500, "An error occured while saving the copy request.");
             }
+
+        }
+
+        // GET: api/inspection/requests
+        [HttpGet("Requests")]
+        public async Task<ActionResult<List<CopyRequestDto>>> GetRequests()
+        {
+            var requests = await _context.CopyRequests.ToListAsync();
+            return Ok(requests);
         }
     }
 }
